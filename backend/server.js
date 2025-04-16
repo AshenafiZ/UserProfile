@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const http = require('http');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -11,9 +12,21 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: '*', 
   },
 });
+
+mongoose.connect(process.env.MONGO_CONNECTION_STRING )
+.then(() => console.log('✅ MongoDB connected'))
+.catch((err) => console.error('❌ MongoDB connection error:', err));
+
+// Example Mongoose Schema
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+});
+
+const User = mongoose.model('User', UserSchema);
 
 // Middleware
 app.use(cors());
