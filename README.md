@@ -9,7 +9,7 @@ The **User Profile App** is a cross-platform solution for managing user profiles
 - **Frontend**: Flutter
 - **Backend**: Node.js + Express
 - **Authentication**: JWT (JSON Web Token)
-- **Database**: MongoDB (or any preferred DB)
+- **Database**: MongoDB 
 - **File Upload**: Multer
 - **Real-Time**: Socket.IO
 - **QR Code**: qr_flutter (Flutter), qrcode (backend)
