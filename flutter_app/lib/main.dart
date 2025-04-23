@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/theme/theme.dart';
+import 'package:flutter_app/screens/auth/login.dart';
+import 'package:flutter_app/screens/auth/login_screen.dart';
+import 'package:flutter_app/screens/auth/register.dart';
 import 'package:flutter_app/screens/auth/signup.dart';
+import 'package:flutter_app/screens/profile/users.dart';
 
 void main() {
   runApp(const MyApp());
+  print('ashenafi');
 }
 
 class MyApp extends StatelessWidget {
@@ -13,10 +18,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter App',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-      home: MultiStepSignupForm(),
+      home: UserListScreen(),
+      
+      // home: LoginPage()
+      // home: RegisterPage()
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

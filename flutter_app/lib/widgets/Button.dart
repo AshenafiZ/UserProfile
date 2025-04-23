@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
 
-Widget customButton({
-  required BuildContext context,
-  required String text,
-  required VoidCallback onPressed,
-  Color? backgroundColor,
-  Color? textColor,
-  IconData? icon,
-  bool fullWidth = false,
-  double borderRadius = 12,
-  double paddingVertical = 14,
-  double paddingHorizontal = 24,
-  double fontSize = 16,
-  FontWeight fontWeight = FontWeight.w600,
-  double? elevation,
-}) {
-  return SizedBox(
-    width: fullWidth ? double.infinity : null,
-    child: ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
-        foregroundColor: textColor ?? Colors.white,
-        padding: EdgeInsets.symmetric(
-          vertical: paddingVertical,
-          horizontal: paddingHorizontal,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
-        elevation: elevation,
-      ),
-      onPressed: onPressed,
-      icon: icon != null ? Icon(icon, size: 18) : const SizedBox.shrink(),
-      label: Text(
-        text,
-        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
-      ),
-    ),
-  );
+class AppButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final bool isOutlined;
+  final bool isExpanded;
+  final IconData? icon;
+
+  const AppButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.isOutlined = false,
+    this.isExpanded = false,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final child = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (icon != null) ...[
+          Icon(icon, size: 20),
+          const SizedBox(width: 8),
+        ],
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+      ],
+    );
+
+    final button = isOutlined
+        ? OutlinedButton(
+            onPressed: onPressed,
+            child: child,
+          )
+        : ElevatedButton(
+            onPressed: onPressed,
+            child: child,
+          );
+
+    return isExpanded ? SizedBox(width: double.infinity, child: button) : button;
+  }
 }

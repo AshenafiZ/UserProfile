@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/Input.dart';
-class CustomTextArea extends StatelessWidget {
-  final String label;
-  final TextEditingController controller;
-  final int maxLines;
-
-  const CustomTextArea({
-    super.key,
-    required this.label,
-    required this.controller,
-    this.maxLines = 4,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomInputField(
-      label: label,
-      controller: controller,
-    );
-  }
+Widget customTextArea({
+  required BuildContext context,
+  required String label,
+  required TextEditingController controller,
+  int maxLines = 5,
+}) {
+  return TextField(
+    controller: controller,
+    maxLines: maxLines,
+    decoration: InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: Theme.of(context).cardColor,
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.onPrimary, width: 2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey, width: 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+  );
 }

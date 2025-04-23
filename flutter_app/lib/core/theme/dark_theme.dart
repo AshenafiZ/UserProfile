@@ -1,115 +1,105 @@
 import 'package:flutter/material.dart';
 
-class TDarkTheme{
+class TDarkTheme {
   TDarkTheme._();
 
-  static TextTheme textTheme = TextTheme(
-    headlineLarge: TextStyle().copyWith(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
-    headlineMedium: TextStyle().copyWith(fontSize: 24.0, fontWeight: FontWeight.w600, color: Colors.white),
-    headlineSmall: TextStyle().copyWith(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.white),
+  static const Color accentColor = Colors.greenAccent;
 
-    titleLarge: TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.white),
-    titleMedium: TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white),
-    titleSmall: TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white),
-
-    bodyLarge: TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.white),
-    bodyMedium: TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.white),
-    bodySmall: TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: (0.2 * 255))),
-
-    labelLarge: TextStyle().copyWith(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white),
-    labelMedium: TextStyle().copyWith(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white.withValues(alpha: (0.2 * 255))),
-    labelSmall: TextStyle().copyWith(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white.withValues(alpha: (0.15 * 255))),
+  static final textTheme = TextTheme(
+    headlineLarge: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
+    headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600, color: Colors.white),
+    headlineSmall: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white),
+    titleLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.white),
+    titleMedium: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white),
+    titleSmall: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.white),
+    bodyLarge: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.white),
+    bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.white),
+    bodySmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.white),
+    labelLarge: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white),
+    labelMedium: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white),
+    labelSmall: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Colors.white),
   );
+
   static final elevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      backgroundColor: accentColor,
+      foregroundColor: Colors.black,
       elevation: 0,
-      foregroundColor: Colors.white,
-      backgroundColor: Colors.greenAccent,
-      disabledForegroundColor: Colors.grey,
-      disabledBackgroundColor: Colors.grey,
-      side: const BorderSide(color: Colors.blue),
       padding: const EdgeInsets.symmetric(vertical: 18),
-      textStyle: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   );
+
   static const appBarTheme = AppBarTheme(
     elevation: 0,
     centerTitle: false,
     scrolledUnderElevation: 0,
     backgroundColor: Colors.transparent,
     surfaceTintColor: Colors.transparent,
-    iconTheme: IconThemeData(color: Colors.black, size: 24),
-    actionsIconTheme: IconThemeData(color: Colors.white, size: 24),
-    titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white)
+    iconTheme: IconThemeData(color: Colors.white),
+    titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white),
   );
-  static BottomSheetThemeData bottomSheetTheme = BottomSheetThemeData(
-    showDragHandle: true,
-    backgroundColor: Colors.white,
-    modalBackgroundColor: Colors.white,
-    constraints: BoxConstraints(minWidth: double.infinity),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+
+  static final checkboxTheme = CheckboxThemeData(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    fillColor: WidgetStateProperty.resolveWith((states) =>
+      states.contains(WidgetState.selected) ? accentColor : Colors.transparent),
+    checkColor: WidgetStateProperty.all(Colors.black),
   );
-  static CheckboxThemeData checkboxTheme = CheckboxThemeData(
-    shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(4)),
-    checkColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.selected)) {
-        return Colors.white;
-      } else {
-        return Colors.black;
-      }
-    }),
-    fillColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.selected)){
-        return Colors.greenAccent;
-      } else {
-        return Colors.transparent;
-      }
-    }),
-  );
-  static ChipThemeData chipTheme = ChipThemeData(
+
+  static final chipTheme = ChipThemeData(
+    backgroundColor: Colors.grey.shade800,
     disabledColor: Colors.grey,
-    labelStyle: const TextStyle(color: Colors.black),
-    selectedColor: Colors.greenAccent,
-    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-    checkmarkColor: Colors.white,
+    labelStyle: const TextStyle(color: Colors.white),
+    selectedColor: accentColor,
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    checkmarkColor: Colors.black,
   );
-  static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
-    errorMaxLines: 3,
-    prefixIconColor: Colors.grey,
-    suffixIconColor: Colors.grey,
-    labelStyle: TextStyle(fontSize: 14, color: Colors.black),
-    hintStyle: TextStyle(fontSize: 14, color: Colors.black),
-    errorStyle: TextStyle(fontStyle: FontStyle.normal),
-    floatingLabelStyle: TextStyle().copyWith(color: Colors.black.withOpacity(0.8)),
-    border: const OutlineInputBorder().copyWith(
+
+  static final inputDecorationTheme = InputDecorationTheme(
+    labelStyle: const TextStyle(fontSize: 14, color: Colors.white),
+    hintStyle: const TextStyle(fontSize: 14, color: Colors.white70),
+    floatingLabelStyle: TextStyle(color: accentColor),
+    border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(width: 1, color: Colors.grey)
-    ) ,
-    enabledBorder: const OutlineInputBorder().copyWith(
+      borderSide: const BorderSide(color: Colors.grey),
+    ),
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(width: 1, color: Colors.grey)
-    ) ,
-    focusedBorder: const OutlineInputBorder().copyWith(
+      borderSide: const BorderSide(color: Colors.grey),
+    ),
+    focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(width: 1, color: Colors.white)
-    ) ,
-    errorBorder: const OutlineInputBorder().copyWith(
+      borderSide: BorderSide(color: accentColor, width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(width: 1, color: Colors.red)
-    ) ,
-    focusedErrorBorder: const OutlineInputBorder().copyWith(
+      borderSide: const BorderSide(color: Colors.red),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(width: 1, color: Colors.orange)
-    ) ,
+      borderSide: const BorderSide(color: Colors.orange),
+    ),
   );
+
   static final outlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       foregroundColor: Colors.white,
-      side: const BorderSide(color: Colors.blueAccent),
+      side: BorderSide(color: accentColor),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      textStyle: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
+  );
+
+  static final dropdownTheme = DropdownMenuThemeData(
+    inputDecorationTheme: inputDecorationTheme,
+  );
+
+  static final bottomSheetTheme = BottomSheetThemeData(
+    showDragHandle: true,
+    backgroundColor: Colors.black,
+    modalBackgroundColor: Colors.black,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
   );
 }

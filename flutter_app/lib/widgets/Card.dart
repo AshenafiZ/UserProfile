@@ -2,53 +2,63 @@ import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
   final String name;
-  final String subtitle;
+  final String email;
+  final String role;
   final String imageUrl;
   final VoidCallback? onTap;
-  final Widget? trailing;
 
   const ProfileCard({
-    super.key,
+    Key? key,
     required this.name,
-    required this.subtitle,
+    required this.email,
+    required this.role,
     required this.imageUrl,
     this.onTap,
-    this.trailing,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Theme.of(context).cardColor,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: ListTile(
-        onTap: onTap,
-        contentPadding: const EdgeInsets.all(12),
-        leading: CircleAvatar(
-          radius: 30,
-          backgroundImage: NetworkImage(imageUrl),
-          backgroundColor: Colors.grey[300],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.primary.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            )
+          ],
         ),
-        title: Text(
-          name,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: isDark ? Colors.white : Colors.black87,
-          ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 32,
+              backgroundImage: NetworkImage(imageUrl),
+              backgroundColor: colorScheme.primary.withOpacity(0.1),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: textTheme.headlineMedium),
+                  const SizedBox(height: 4),
+                  Text(email, style: textTheme.bodyMedium?.copyWith(color: colorScheme.secondary)),
+                  const SizedBox(height: 2),
+                  Text(role, style: textTheme.bodySmall?.copyWith(color: colorScheme.primary)),
+                ],
+              ),
+            ),
+          ],
         ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 14,
-            color: isDark ? Colors.grey[400] : Colors.black54,
-          ),
-        ),
-        trailing: trailing,
       ),
     );
   }
