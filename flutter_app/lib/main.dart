@@ -3,6 +3,7 @@ import 'package:flutter_app/core/theme/theme.dart';
 import 'package:flutter_app/screens/auth/login.dart';
 import 'package:flutter_app/screens/auth/login_screen.dart';
 import 'package:flutter_app/screens/auth/register.dart';
+import 'package:flutter_app/screens/auth/registerol.dart';
 import 'package:flutter_app/screens/auth/signup.dart';
 import 'package:flutter_app/screens/profile/users.dart';
 
@@ -18,11 +19,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter App',
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-      home: UserListScreen(),
-      
+      // home: UserListScreen(),
+      // home: LoginScreen(),
+      home: Register(),
       // home: LoginPage()
       // home: RegisterPage()
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),

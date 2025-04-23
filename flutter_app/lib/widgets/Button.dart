@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AppButton extends StatelessWidget {
+class Button extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final bool isOutlined;
   final bool isExpanded;
   final IconData? icon;
 
-  const AppButton({
+  const Button({
     super.key,
     required this.label,
     required this.onPressed,
