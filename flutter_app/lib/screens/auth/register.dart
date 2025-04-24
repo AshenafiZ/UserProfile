@@ -1,16 +1,19 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class RegisterPage extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterState extends State<Register> {
   int _currentStep = 0;
-  final _formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>()];
+  File? _profileImageFile;
+  Uint8List? _profileImageBytes;
 
+  final _formKey = GlobalKey<FormState>();
   // Step 1
   final firstNameCtrl = TextEditingController();
   final lastNameCtrl = TextEditingController();
@@ -28,180 +31,122 @@ class _RegisterPageState extends State<RegisterPage> {
   // Step 3
   final emailCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
+  final passwordCtrl2 = TextEditingController();
   final phoneCtrl = TextEditingController();
 
   final ImagePicker picker = ImagePicker();
 
-  Future<void> pickPhoto() async {
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        profilePhoto = File(pickedFile.path);
-      });
+  // Example form fields
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      if (kIsWeb) {
+        final bytes = await picked.readAsBytes();
+        setState(() => _profileImageBytes = bytes);
+      } else {
+        setState(() => _profileImageFile = File(picked.path));
+      }
     }
   }
-
   bool isValidPassword(String value) {
     return RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$').hasMatch(value);
   }
-
-  void onSubmit() {
-    final userData = {
-      "firstName": firstNameCtrl.text.trim(),
-      "lastName": lastNameCtrl.text.trim(),
-      "dob": dob?.toIso8601String(),
-      "sex": sex,
-      "profilePhoto": profilePhoto?.path,
-      "address": {
-        "country": countryCtrl.text.trim(),
-        "region": regionCtrl.text.trim(),
-        "city": cityCtrl.text.trim(),
-        "subCity": subCityCtrl.text.trim(),
-        "kebele": kebeleCtrl.text.trim(),
-      },
-      "email": emailCtrl.text.trim(),
-      "password": passwordCtrl.text,
-      "phone": phoneCtrl.text.trim()
-    };
-
-    print("✅ Submitted user: $userData");
-    // Call your API here
-  }
+  List<Step> _steps() => [
+    Step(
+      title: Text('Personal Info'),
+      content: Column(
+        children: [
+          GestureDetector(
+            onTap: _pickImage,
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage: kIsWeb
+                ? (_profileImageBytes != null ? MemoryImage(_profileImageBytes!) : null)
+                : (_profileImageFile != null ? FileImage(_profileImageFile!) : null),
+              child: (_profileImageFile == null && _profileImageBytes == null)
+                  ? Icon(Icons.add_a_photo)
+                  : null,
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: nameController,
+            decoration: InputDecoration(labelText: 'Full Name'),
+          ),
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(labelText: 'Email'),
+          ),
+        ],
+      ),
+      isActive: _currentStep >= 0,
+    ),
+    Step(
+      title: Text('Address'),
+      content: TextFormField(
+        controller: addressController,
+        decoration: InputDecoration(labelText: 'Address'),
+      ),
+      isActive: _currentStep >= 1,
+    ),
+    Step(
+      title: Text('Account Info'),
+      content: Column(
+        children: [
+          TextFormField(
+            controller: usernameController,
+            decoration: InputDecoration(labelText: 'Username'),
+          ),
+          TextFormField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(labelText: 'Password'),
+          ),
+        ],
+      ),
+      isActive: _currentStep >= 2,
+    ),
+  ];
 
   void _continue() {
-    if (_formKeys[_currentStep].currentState!.validate()) {
-      if (_currentStep < 2) {
-        setState(() => _currentStep++);
-      } else {
-        onSubmit();
+    if (_currentStep < _steps().length - 1) {
+      setState(() => _currentStep++);
+    } else {
+      if (_formKey.currentState!.validate()) {
+        // Handle form submission
+        print('Form Submitted');
       }
+    }
+  }
+
+  void _cancel() {
+    if (_currentStep > 0) {
+      setState(() => _currentStep--);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Signup')),
-      body: Stepper(
-        currentStep: _currentStep,
-        onStepContinue: _continue,
-        onStepCancel: () {
-          if (_currentStep > 0) {
-            setState(() => _currentStep--);
-          }
-        },
-        steps: [
-          Step(
-            title: Text("Personal Info"),
-            isActive: _currentStep >= 0,
-            content: Form(
-              key: _formKeys[0],
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: firstNameCtrl,
-                    decoration: InputDecoration(labelText: 'First Name'),
-                    validator: (v) => v!.isEmpty ? 'Required' : null,
-                  ),
-                  TextFormField(
-                    controller: lastNameCtrl,
-                    decoration: InputDecoration(labelText: 'Last Name'),
-                    validator: (v) => v!.isEmpty ? 'Required' : null,
-                  ),
-                  Row(
-                    children: [
-                      Text(dob != null ? "DOB: ${dob!.toLocal().toString().split(' ')[0]}" : "Select DOB"),
-                      IconButton(
-                        icon: Icon(Icons.calendar_today),
-                        onPressed: () async {
-                          DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime(2000),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-                          if (picked != null) setState(() => dob = picked);
-                        },
-                      ),
-                    ],
-                  ),
-                  if (dob == null) Text('Date of birth required', style: TextStyle(color: Colors.red)),
-                  DropdownButtonFormField<String>(
-                    value: sex,
-                    items: ['Male', 'Female'].map((val) => DropdownMenuItem(value: val, child: Text(val))).toList(),
-                    hint: Text("Select Sex"),
-                    onChanged: (val) => setState(() => sex = val),
-                    validator: (v) => v == null ? 'Required' : null,
-                  ),
-                  SizedBox(height: 10),
-                  profilePhoto != null
-                      ? Image.file(profilePhoto!, height: 100)
-                      : Text("No photo selected"),
-                  ElevatedButton(onPressed: pickPhoto, child: Text("Choose Photo")),
-                ],
-              ),
-            ),
-          ),
-          Step(
-            title: Text("Address Info"),
-            isActive: _currentStep >= 1,
-            content: Form(
-              key: _formKeys[1],
-              child: Column(
-                children: [
-                  TextFormField(controller: countryCtrl, decoration: InputDecoration(labelText: 'Country'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                  TextFormField(controller: regionCtrl, decoration: InputDecoration(labelText: 'Region'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                  TextFormField(controller: cityCtrl, decoration: InputDecoration(labelText: 'City'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                  TextFormField(controller: subCityCtrl, decoration: InputDecoration(labelText: 'Sub City'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                  TextFormField(controller: kebeleCtrl, decoration: InputDecoration(labelText: 'Kebele'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                ],
-              ),
-            ),
-          ),
-          Step(
-            title: Text("Account Info"),
-            isActive: _currentStep >= 2,
-            content: Form(
-              key: _formKeys[2],
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: emailCtrl,
-                    decoration: InputDecoration(labelText: 'Email'),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Required';
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) return 'Invalid email';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: passwordCtrl,
-                    decoration: InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Required';
-                      if (!isValidPassword(v)) {
-                        return 'Must have upper, lower, digit, symbol, 8+ chars';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: phoneCtrl,
-                    decoration: InputDecoration(labelText: 'Phone'),
-                    keyboardType: TextInputType.phone,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Required';
-                      if (!RegExp(r'^\+?[0-9]{7,15}$').hasMatch(v)) return 'Invalid phone';
-                      return null;
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+      appBar: AppBar(
+        title: Text('Signup Stepper'),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: Form(
+        key: _formKey,
+        child: Stepper(
+          currentStep: _currentStep,
+          onStepContinue: _continue,
+          onStepCancel: _cancel,
+          steps: _steps(),
+        ),
       ),
     );
   }

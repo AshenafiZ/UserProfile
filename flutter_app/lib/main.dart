@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
       darkTheme: TAppTheme.darkTheme,
       // home: UserListScreen(),
       // home: LoginScreen(),
-      home: Register(),
+      // home: Register(),
       // home: LoginPage()
-      // home: RegisterPage()
+      home: RegisterPage()
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

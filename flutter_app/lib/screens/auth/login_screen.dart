@@ -62,11 +62,11 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("Welcome Back", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 16),
+              const SizedBox(height: 19),
               InputField( label: 'Email', hintText: "eg. user@gmail.com", controller: _emailController, icon: Icons.email),
               const SizedBox(height: 19),
               InputField( controller: _passwordController, label: 'Password', icon: Icons.lock, type: 'password',),
-              const SizedBox(height: 12),
+              const SizedBox(height: 19),
               Row(
                 children: [
                   Checkbox(
