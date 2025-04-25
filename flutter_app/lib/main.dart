@@ -5,11 +5,10 @@ import 'package:flutter_app/screens/auth/login_screen.dart';
 import 'package:flutter_app/screens/auth/register.dart';
 import 'package:flutter_app/screens/auth/registerol.dart';
 import 'package:flutter_app/screens/auth/signup.dart';
-import 'package:flutter_app/screens/profile/users.dart';
+import 'package:flutter_app/screens/profile/user_list.dart';
 
 void main() {
   runApp(const MyApp());
-  print('ashenafi');
 }
 
 class MyApp extends StatelessWidget {
@@ -23,11 +22,17 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginScreen(),
+        '/home': (context) => UserListScreen(),
+        '/register': (context) => RegisterPage(),
+      },
       // home: UserListScreen(),
       // home: LoginScreen(),
       // home: Register(),
       // home: LoginPage()
-      home: RegisterPage()
+      // home: RegisterPage()
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

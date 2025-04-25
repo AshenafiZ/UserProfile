@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, )
 applyMiddleware(app);
 
 app.use('/api', authRoutes);
-app.use('/api/admin', userRoutes)
+app.use('/api/users', userRoutes)
 app.get('/', (req, res) => {
   res.send('User Profile API running...');
 });

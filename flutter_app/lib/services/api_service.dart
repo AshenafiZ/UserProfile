@@ -14,10 +14,6 @@ class ApiService {
     if(!kIsWeb){
       dio.interceptors.add(CookieManager(cookieJar));
     }
-    // if (kIsWeb) {
-    //   dio.httpClientAdapter = BrowserHttpClientAdapter()
-    //     ..withCredentials = true;
-    // }
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? query}) {

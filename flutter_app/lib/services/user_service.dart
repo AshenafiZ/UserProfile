@@ -28,11 +28,14 @@ class UserService {
   }
   
   Future<List<UserModel>> fetchAllUsers() async {
-    final response = await _api.get('/admin');
+    final response = await _api.get('/api/users');
     print('Fetched users: ${response.data}');
 
     final List<dynamic> data = response.data; 
     return data.map((json) => UserModel.fromJson(json)).toList();
+  }
+  Future<Response> getUserById(String id) {
+    return _api.get('/api/admin/$id');
   }
   Future<Response> getUserProfile() async {
     final token = await TokenStorage.getToken();

@@ -6,6 +6,8 @@ class UserModel {
   final String role;
   final String? sex;  
   final String profilePhotoUrl;
+  final String? coverPhotoUrl;
+  final String? phone;
 
   UserModel({
     required this.id,
@@ -15,17 +17,21 @@ class UserModel {
     required this.role,
     this.sex,
     required this.profilePhotoUrl,
+    this.coverPhotoUrl,
+    this.phone,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      role: json['role'],
-      sex: json['sex'],
-      profilePhotoUrl: json['profilePhotoUrl'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      email: json['email'] ?? '',
+      role: json['role'] ?? '',
+      sex: json['sex'] ?? '',
+      profilePhotoUrl: json['profilePhotoUrl'] ?? '',
+      coverPhotoUrl: json['coverPhotoUrl'] ?? '',
+      phone: json['phone'] ?? '',
     );
   }
 }

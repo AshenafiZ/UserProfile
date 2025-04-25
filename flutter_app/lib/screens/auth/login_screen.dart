@@ -17,38 +17,44 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool isLoading = false;
   final AuthService _authService = AuthService();
-  bool _rememberMe = false;
-  void _login() {
-    // Handle login logic here
-    print("Email: ${_emailController.text}, Remember Me: $_rememberMe");
-  }
-  void loginUser() async {
+  bool rememberMe = false;
+  
+  void _handleLogin() async {
+    print('try to login');
     setState(() => isLoading = true);
 
-    // try {
-    //   final user = await _authService.login(
-    //     emailController.text.trim(),
-    //     passwordController.text.trim(),
-    //   );
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-    //   if (user != null) {
-    //     // Navigate to profile screen
-    //     Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(builder: (_) => ProfileScreen(user: user)),
-    //     );
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text('Login failed')),
-    //     );
-    //   }
-    // } catch (e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text('Error: ${e.toString()}')),
-    //   );
-    // }
+    final user = await _authService.login(
+      email,
+      password,
+      rememberMe,
+    );
 
     setState(() => isLoading = false);
+    print(user);
+    if (user != null) {
+
+      // Navigate to the home screen after successful login
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      // Show error if login fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed. Please check your credentials')),
+      );
+    }
+    if (user != null) {
+        // Navigate to profile screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ProfileScreen(user: user)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed')),
+        );
+      }
   }
 
   @override
@@ -70,8 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 children: [
                   Checkbox(
-                    value: _rememberMe,
-                    onChanged: (val) => setState(() => _rememberMe = val!),
+                    value: rememberMe,
+                    onChanged: (val) => setState(() => rememberMe = val!),
                   ),
                   const Text('Remember Me'),
                   const Spacer(),
@@ -82,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              Button(label: "Login", onPressed: _login),
+              Button(label: "Login", onPressed:  _handleLogin),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -91,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: () {
                       // Navigate to signup screen
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: const Text("Create Account"),
                   )
